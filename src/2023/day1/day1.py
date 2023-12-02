@@ -1,4 +1,4 @@
-from helpers import file_parser
+from src.helpers import file_parser
 import re
 
 numbers_on_line = r"\d"
