@@ -5,7 +5,7 @@ from src.helpers import file_parser
 
 def part_a():
     data = file_parser.file_as_line_list(2023, 2)
-    games = parse_cubes(data)
+    games = parse_cubes_new(data)
 
     limits = [("red", 12), ("green", 13), ("blue", 14)]
     invalid_games = set()
@@ -20,7 +20,7 @@ def part_a():
 
 def part_b():
     data = file_parser.file_as_line_list(2023, 2)
-    games = parse_cubes(data)
+    games = parse_cubes_new(data)
 
     cube_powers = []
     for cubes in games.values():
@@ -40,6 +40,18 @@ def parse_cubes(data):
                 num = int(num)
                 if num > games[game_id][color]:
                     games[game_id][color] = num
+    return games
+
+
+def parse_cubes_new(data):
+    games: dict[int, dict] = defaultdict(lambda: defaultdict(int))
+    for line in data:
+        info = line.replace(",", "").replace(";", "").replace(":", "").strip().split(" ")
+        game_id = int(info[1])
+        for i in range(2, len(info[2:]) + 1, 2):
+            num, color = int(info[i]), info[i + 1]
+            if num > games[game_id][color]:
+                games[game_id][color] = num
     return games
 
 
