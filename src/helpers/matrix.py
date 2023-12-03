@@ -1,11 +1,11 @@
 
 
-def neighbours_grid(point, x_max, y_max, diagonal=False):
+def neighbours_grid(point, x_len, y_len, diagonal=False):
     x, y = point
     return [
         (x + dx, y + dy)
         for dx, dy in _get_kernel(diagonal)
-        if 0 <= (x + dx) <= x_max and 0 <= (y + dy) <= y_max
+        if 0 <= (x + dx) <= x_len - 1 and 0 <= (y + dy) <= y_len - 1
     ]
 
 

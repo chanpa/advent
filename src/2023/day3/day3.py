@@ -1,43 +1,47 @@
 import re
 from collections import defaultdict
-from pprint import pprint
 from functools import reduce
 
 from src.helpers import file_parser
 from src.helpers import matrix
 
 
+data = file_parser.file_as_line_list(2023, 3)
+x_len = len(data[0])
+y_len = len(data)
+
+
 def part_a():
-    data = file_parser.file_as_line_list(2023, 3)
     numbers = find_numbers(data)
 
     part_numbers = []
-    for line_no, numbers_on_line in numbers.items():
+    for y, numbers_on_line in numbers.items():
         for num, start, end in numbers_on_line:
             neighbours = set()
             for x in range(start, end):
-                neighbours.update(set(matrix.neighbours_grid((x, line_no), len(data[0]) - 1, len(data) - 1, diagonal=True)))
+                neighbours.update(set(matrix.neighbours_grid((x, y), x_len, y_len, diagonal=True)))
 
-            for x, y in neighbours:
-                if data[y][x] != "." and data[y][x].isnumeric() is False:
+            for nx, ny in neighbours:
+                if data[ny][nx] != "." and not data[ny][nx].isnumeric():
                     part_numbers.append(num)
 
     return sum(part_numbers)
 
 
 def part_b():
-    data = file_parser.file_as_line_list(2023, 3)
     numbers = find_numbers(data)
     possible_gears = find_possible_gears(data)
 
     gear_ratios = []
     for possible_gear in possible_gears:
         gear_numbers = set()
-        for x, y in matrix.neighbours_grid(possible_gear, len(data[0]) - 1, len(data) - 1, diagonal=True):
-            if data[y][x].isnumeric():
-                for num, start, end in numbers[y]:
-                    if start <= x < end:
+        for nx, ny in matrix.neighbours_grid(possible_gear, x_len, y_len, diagonal=True):
+            if data[ny][nx].isnumeric():
+                for num, start, end in numbers[ny]:
+                    if start <= nx < end:
                         gear_numbers.add(num)
+                        break
+
         if len(gear_numbers) == 2:
             gear_ratios.append(reduce(lambda n, m: n * m, gear_numbers))
 
