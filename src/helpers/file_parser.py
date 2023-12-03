@@ -7,4 +7,4 @@ def file_as_line_list(year, day, test=None):
         case "a": path = Path(base_path) / "test_a.txt"
         case "b": path = Path(base_path) / "test_b.txt"
         case _: path = Path(base_path) / "input.txt"
-    return [line for line in open(path)]
+    return [line.strip() for line in open(path)]
