@@ -15,6 +15,7 @@ string_to_number = {
     "nine": 9,
 }
 
+
 def part_a():
     numbers = [
         merge_numbers(*re.findall(numbers_on_line, line))
