@@ -9,12 +9,8 @@ data = file_parser.file_as_line_list(2023, 4)
 
 def part_a():
     points = []
-    for i, line in enumerate(data):
-        card, numbers = line.strip().split(": ")
-        winning_numbers_str, my_numbers_str = numbers.split(" | ")
-        winning_numbers = set(map(int, re.findall(r"\d+", winning_numbers_str)))
-        my_numbers = set(map(int, re.findall(r"\d+", my_numbers_str)))
-        winners = my_numbers.intersection(winning_numbers)
+    for card in data:
+        winners = get_winners(card)
 
         if winners:
             points.append(1 * (2 ** (len(winners) - 1)))
@@ -24,16 +20,22 @@ def part_a():
 
 def part_b():
     cards = Counter(i for i in range(1, len(data) + 1))
-    for i, line in enumerate(data):
-        card, numbers = line.strip().split(": ")
-        winning_numbers_str, my_numbers_str = numbers.split(" | ")
-        winning_numbers = set(map(int, re.findall(r"\d+", winning_numbers_str)))
-        my_numbers = set(map(int, re.findall(r"\d+", my_numbers_str)))
-        winners = my_numbers.intersection(winning_numbers)
+    for i, card in enumerate(data):
+        winners = get_winners(card)
+
         for w in range(1, len(winners) + 1):
             cards[i + 1 + w] += 1 * (cards[i + 1])
 
     return sum(cards.values())
+
+
+def get_winners(card):
+    numbers = card.strip().split(": ")[1]
+    winning_numbers, my_numbers = map(
+        lambda s: set(map(int, re.findall(r"\d+", s))),
+        numbers.split(" | ")
+    )
+    return my_numbers.intersection(winning_numbers)
 
 
 if __name__ == "__main__":
