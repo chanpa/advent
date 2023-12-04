@@ -8,32 +8,27 @@ data = file_parser.file_as_line_list(2023, 4)
 
 
 def part_a():
-    points = []
+    points = 0
     for card in data:
-        winners = get_winners(card)
+        if winners := get_winners(card):
+            points += 2 ** (len(winners) - 1)
 
-        if winners:
-            points.append(1 * (2 ** (len(winners) - 1)))
-
-    return sum(points)
+    return points
 
 
 def part_b():
-    cards = Counter(i for i in range(1, len(data) + 1))
+    cards = Counter(i + 1 for i in range(len(data)))
     for i, card in enumerate(data):
-        winners = get_winners(card)
-
-        for w in range(1, len(winners) + 1):
-            cards[i + 1 + w] += 1 * (cards[i + 1])
+        for w in range(len(get_winners(card))):
+            cards[i + 1 + w + 1] += cards[i + 1]
 
     return sum(cards.values())
 
 
 def get_winners(card):
-    numbers = card.strip().split(": ")[1]
     winning_numbers, my_numbers = map(
         lambda s: set(map(int, re.findall(r"\d+", s))),
-        numbers.split(" | ")
+        card.strip().split(": ")[1].split(" | ")
     )
     return my_numbers.intersection(winning_numbers)
 
