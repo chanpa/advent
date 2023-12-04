@@ -1,6 +1,4 @@
-import re
 from collections import Counter
-
 from src.helpers import file_parser
 
 
@@ -27,7 +25,7 @@ def part_b():
 
 def get_winners(card):
     winning_numbers, my_numbers = map(
-        lambda s: set(map(int, re.findall(r"\d+", s))),
+        lambda s: set(map(int, s.split())),
         card.strip().split(": ")[1].split(" | ")
     )
     return my_numbers.intersection(winning_numbers)
